@@ -1,0 +1,11 @@
+.eslintrc.json
+/logs
+.DS_Store
+**/.DS_Store
+/ssl
+.env
+node_modules
+/tmp
+Lambda.zip
+deploy-transform.yaml
+config.parameters

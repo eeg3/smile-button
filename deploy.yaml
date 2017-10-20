@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Parameters: 
+  ImageBucketName:
+    Type: String
+    Default: "image-bucket"
+  TwilioAccountSid:
+    Type: String
+    Default: "ACXXXXXXXXXXXXXXXXXXXXX"
+  TwilioAuthToken:
+    Type: String
+    Default: "1a2b3c4d5e6f7g"
+  TwilioFromNumber:
+    Type: String
+    Default: "+19805551234"
+  TwilioToNumber:
+    Type: String
+    Default: "+9805556789"
+Resources:
+  ImageBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref ImageBucketName
+  SmileLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: smile.handler
+      Runtime: nodejs6.10
+      CodeUri: ./
+      Environment:
+        Variables:
+          IMAGE_BUCKET: !Ref ImageBucketName
+          TWILIO_ACCOUNTSID: !Ref TwilioAccountSid
+          TWILIO_AUTHTOKEN: !Ref TwilioAuthToken
+          TWILIO_FROMNUMBER: !Ref TwilioFromNumber
+          TWILIO_TONUMBER: !Ref TwilioToNumber
+      Timeout: 30
+      MemorySize: 1024
+      Policies:
+        - AWSLambdaExecute # Managed Policy
+        - Version: '2012-10-17' # Policy Document
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: !Sub "arn:aws:s3:::${ImageBucket}/*"
+        - Version: '2012-10-17' # Policy Document
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:ListBucket
+              Resource: !Sub "arn:aws:s3:::${ImageBucket}"
+        - Version: '2012-10-17' # Policy Document
+          Statement:
+            - Effect: Allow
+              Action:
+                - rekognition:DetectFaces
+              Resource: "*"

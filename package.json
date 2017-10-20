@@ -1,0 +1,17 @@
+{
+  "name": "smile-button",
+  "version": "1.0.0",
+  "description": "Find a smile in a bucket!",
+  "main": "smile.js",
+  "scripts": {
+    "zip": "zip -r Lambda.zip * -x *.zip *.log",
+    "predeploy": "aws cloudformation package --template-file deploy.yaml --output-template-file deploy-transform.yaml --s3-bucket [INSERT-LAMBDA-UPLOAD-BUCKET]",
+    "deploy": "aws cloudformation deploy --template-file deploy-transform.yaml --parameter-overrides $(cat config.parameters) --capabilities CAPABILITY_IAM --stack-name [INSERT-STACK-NAME]"
+  },
+  "dependencies": {
+    "twilio": "^3.8.1"
+  },
+  "devDependencies": {},
+  "author": "Earl Gay",
+  "license": "BSD-2-Clause"
+}
