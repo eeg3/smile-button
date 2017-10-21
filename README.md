@@ -15,3 +15,7 @@ Upload an image into your Images Bucket
 Click Test in the Lambda function.
 
 Create IOT Button trigger.
+
+## Changing Config
+
+To modify the configuration, simply edit the Environment Variables within the Lambda Function.
